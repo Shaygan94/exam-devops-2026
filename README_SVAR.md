@@ -12,3 +12,5 @@ Brukte commit-SHA (git rev-parse --short HEAD) og latest for image tagging.
 Commit-Sha:Sørger for full sporbarhet og revisjonskontroll ved at docker-imaget i ECR er knyttet til en spesifikk commit i kildekoden.
 
 Latest: Brukes for enkel referanse til den nyeste versjonen av app'en
+
+Lenke etil grønn kjøring Github Actions: https://github.com/Shaygan94/exam-devops-2026/actions/runs/41092765216
