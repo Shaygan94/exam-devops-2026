@@ -1,6 +1,6 @@
 variable "aws_region" {
-  type        = string
-  default     = "eu-west-1"
+  type    = string
+  default = "eu-west-1"
 }
 
 variable "project_name" {
@@ -9,12 +9,12 @@ variable "project_name" {
 }
 
 variable "candidate_number" {
-  type        = string
-  default     = "13" 
+  type    = string
+  default = "13"
 }
 
 variable "image" {
-  type=string
+  type    = string
   default = "244530008913.dkr.ecr.eu-west-1.amazonaws.com/wishifai-repo-13:latest"
 
   description = "Full container image URI (registry + repository + tag) that the ECS task will run"
