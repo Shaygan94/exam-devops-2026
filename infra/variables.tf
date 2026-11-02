@@ -15,6 +15,7 @@ variable "candidate_number" {
 
 variable "image" {
   type = string
+  default = "244530008913.dkr.ecr.eu-west-1.amazonaws.com/wishifai-repo-13:latest"
 
   description = "Full container image URI (registry + repository + tag) that the ECS task will run"
 
