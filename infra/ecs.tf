@@ -10,9 +10,11 @@ resource "aws_ecs_express_gateway_service" "this" {
   execution_role_arn      = "arn:aws:iam::244530008913:role/ecsTaskExecutionRole"
   infrastructure_role_arn = "arn:aws:iam::244530008913:role/service-role/ecsInfrastructureRoleForExpressServices"
   task_role_arn           = aws_iam_role.ecs_task_role.arn
+  health_check_path       = "/actuator/health"
 
   primary_container {
     image = local.image_uri
+    container_port = 8080
 
     environment {
       name  = "S3_BUCKET"
