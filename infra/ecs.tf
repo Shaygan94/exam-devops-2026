@@ -13,7 +13,7 @@ resource "aws_ecs_express_gateway_service" "this" {
   health_check_path       = "/actuator/health"
 
   primary_container {
-    image = local.image_uri
+    image          = local.image_uri
     container_port = 8080
 
     environment {
