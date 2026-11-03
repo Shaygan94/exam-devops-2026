@@ -1,5 +1,5 @@
 output "service_url" {
-  value       = "https://${aws_ecs_express_gateway_service.this.service_name}.${var.aws_region}.ecs.amazonaws.com"
+  value       = aws_ecs_express_gateway_service.this.ingress_paths[0].endpoint
   description = "public URL of the ECS Express service"
 }
 

@@ -29,6 +29,11 @@ public class AppController {
         return Map.of("status", "UP", "timestamp", Instant.now().toString());
     }
 
+    @GetMapping("/")
+    public Map<String, Object> root() {
+        return Map.of("status", "UP", "service", "wishifai-service");
+}
+
     @PostMapping(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AnalyzeResponse analyze(@RequestParam("image") MultipartFile image) throws IOException {
         return wishlist.process(image.getBytes(), image.getOriginalFilename(), image.getContentType());
