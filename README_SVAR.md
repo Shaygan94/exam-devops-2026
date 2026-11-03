@@ -8,9 +8,10 @@ docker run -p 9999:8080
 # Oppgave 1B 
 Tagging-strategi:
 Brukte commit-SHA (git rev-parse --short HEAD) og latest for image tagging. 
-
 Commit-Sha:Sørger for full sporbarhet og revisjonskontroll ved at docker-imaget i ECR er knyttet til en spesifikk commit i kildekoden.
-
-Latest: Brukes for enkel referanse til den nyeste versjonen av app'en
+Latest: Brukes for enkel referanse til den nyeste versjonen av applikasjonen
 
 Lenke etil grønn kjøring Github Actions: https://github.com/Shaygan94/exam-devops-2026/actions/runs/41092765216
+
+# Oppgave 2c
+Det er fornufting at terraform kjører etter at containeren er builda, fordi infrastrukturen trenger den nye Docker-imagetaggen for å vite hvilken versjon av applikasjonen som skal rulles ut. Hvis terraform hadde kjørt før eller parallelt, ville ikke imaget finnes enda. 
