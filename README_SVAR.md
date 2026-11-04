@@ -18,11 +18,10 @@ Det er fornufting at terraform kjører etter at containeren er builda, fordi inf
 
 #Oppgave 3a
 
-#Timer-metrikker
+Timer-metrikker
 - app.rekognition.duration måler responstid for rekognition-kallet 
 - app.bedrock.duration måler responstid for Bedrock-kallet
 
-#Business-metrikker
+Business-metrikker
 - app.gifts.suggested.total (counter). Totalt antall giftforslag generert. Sier noe om faktisk bruksvolum(ikke bare antall kall).
 - app.gifts.suggestion.per.analysis (distributionsummary). Antall forslag per analyse. i AI prompten er det "inntil 5" i en tekstinstruksjon uten en hard grense. Metrikken vil avdekke om AI'en faktisk følger dette. Dette kan vi bruke som alarm i 3B.
-
