@@ -12,6 +12,7 @@ resource "aws_cloudwatch_dashboard" "wishifai" {
         properties = {
           title  = "Rekogntion and bedrock latency"
           view   = "timeSeries"
+          region = "eu-west-1"
           period = 60
           stat   = "Maximum"
           metrics = [
@@ -30,6 +31,7 @@ resource "aws_cloudwatch_dashboard" "wishifai" {
         properties = {
           title  = "Gift reccomendation per analysis"
           view   = "timeSeries"
+          region = "eu-west-1"
           period = 60
           stat   = "Average"
           metrics = [
@@ -46,6 +48,7 @@ resource "aws_cloudwatch_dashboard" "wishifai" {
         properties = {
           title  = "ECS CPU and Memory"
           view   = "timeSeries"
+          region = "eu-west-1"
           period = 60
           stat   = "Maximum"
           metrics = [
@@ -64,6 +67,7 @@ resource "aws_cloudwatch_dashboard" "wishifai" {
         properties = {
           title  = "Total sum gifts generated"
           view   = "timeSeries"
+          region = "eu-west-1"
           period = 60
           stat   = "Sum"
           metrics = [
