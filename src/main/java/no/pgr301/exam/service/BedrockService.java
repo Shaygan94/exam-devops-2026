@@ -1,6 +1,8 @@
 package no.pgr301.exam.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.micrometer.core.instrument.MeterRegistry;
 import no.pgr301.exam.model.GiftAnalysis;
 import no.pgr301.exam.model.GiftSuggestion;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +26,14 @@ public class BedrockService {
 
     private final BedrockRuntimeClient client;
     private final String modelId;
+    private final MeterRegistry meterRegistry;
 
     public BedrockService(BedrockRuntimeClient client,
-                          @Value("${app.bedrock.model-id}") String modelId) {
+                          @Value("${app.bedrock.model-id}") String modelId, MeterRegistry meterRegistry) {
         this.client = client;
         this.modelId = modelId;
-    }
+        this.meterRegistry = meterRegistry;
+    }   
 
     /**
      * Denne måten å lage prompt på kalles "chain-of-thought" og kan være veldig effektivt
@@ -86,6 +90,7 @@ public class BedrockService {
                 }
                 """.formatted(String.join(", ", labels));
 
+        return meterRegistry.timer("app.bedrock.duration").record(() -> {
         ConverseResponse resp = client.converse(ConverseRequest.builder()
                 .modelId(modelId)
                 .messages(Message.builder()
@@ -96,8 +101,8 @@ public class BedrockService {
 
         String text = resp.output().message().content().get(0).text();
         return parseAnalysis(text);
-    }
-
+    });
+}
     private GiftAnalysis parseAnalysis(String text) {
         try {
             Matcher m = JSON_OBJECT.matcher(text);
