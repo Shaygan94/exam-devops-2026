@@ -31,6 +31,9 @@ public class WishlistService {
         meterRegistry.counter("app.gifts.suggested.total")
         .increment(analysis.suggestions().size());
 
+        meterRegistry.summary("app.gifts.suggestions.per.analysis")
+        .record(analysis.suggestions().size());
+
         return new AnalyzeResponse(
                 s3Key,
                 labels,
