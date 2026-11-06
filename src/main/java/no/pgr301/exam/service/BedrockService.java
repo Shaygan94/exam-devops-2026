@@ -60,7 +60,7 @@ public class BedrockService {
                    livssituasjon og interesser basert på det du ser. Vær spesifikk,
                    men ikke overdriv — hvis du er usikker, si det.
 
-                3. GAVER: Basert på analysen over, foreslå inntil 6 gaver som faktisk
+                3. GAVER: Basert på analysen over, foreslå nøyaktig 6 gaver som faktisk
                    passer for denne personen. **Prøv å navngi reelle produkter eller
                    merker** der det er mulig. Unngå generiske forslag som "en bok"
                    eller "et gavekort".
