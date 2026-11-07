@@ -27,6 +27,8 @@ jobs:
     name: Push Docker image to ECR
     needs: [test]
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.build.outputs.image_tag }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -43,11 +45,13 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push Docker image to ECR
+        id: build
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: wishifai-repo-13
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
           
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
           
@@ -87,4 +91,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: infra
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var="image_tag=${{ needs.push_to_registry.outputs.image_tag }}"
