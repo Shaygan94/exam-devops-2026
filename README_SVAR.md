@@ -16,12 +16,50 @@ Lenke etil grønn kjøring Github Actions: https://github.com/Shaygan94/exam-dev
 # Oppgave 2c
 Det er fornufting at terraform kjører etter at containeren er builda, fordi infrastrukturen trenger den nye Docker-imagetaggen for å vite hvilken versjon av applikasjonen som skal rulles ut. Hvis terraform hadde kjørt før eller parallelt, ville ikke imaget finnes enda. 
 
-#Oppgave 3a
+# Oppgave 3a
 
 Timer-metrikker
 - app.rekognition.duration måler responstid for rekognition-kallet 
 - app.bedrock.duration måler responstid for Bedrock-kallet
 
 Business-metrikker
-- app.gifts.suggested.total (counter). Totalt antall giftforslag generert. Sier noe om faktisk bruksvolum(ikke bare antall kall).
+- app.gifts.suggested.total (counter). Totalt antall giftforslag generert. Sier noe om faktisk bruksvolum (ikke bare antall kall).
+
 - app.gifts.suggestion.per.analysis (distributionsummary). Antall forslag per analyse. i AI prompten er det "inntil 5" i en tekstinstruksjon uten en hard grense. Metrikken vil avdekke om AI'en faktisk følger dette. Dette kan vi bruke som alarm i 3B.
+
+#Oppgave 3b
+
+Dashboard heter `wishifai-13`
+Datagrunnlaget er 40 curl-kall mot tjenesten (20 per bilde).
+
+![CloudWatch-skjermbilde](media/cloudwatchImg.png)
+
+#Rekognition and Bedrock latency
+Viser maksimal responstid per min. Bedrock bruker ca 16-19 sek og Rekognition bruker under 1 sek. Bedrock er den klare flaskehalsen og forklarer grunderens bekymring om treg tjeneste. 
+
+#Gift reccomondation per analysis
+Viser gjennomsnittlig gaveforslag returnert per analyse. Prompten instruerer Bedrock om "inntil 5 gaver", og grafen bekrefter at modellen returnerer nøyaktig 5. 
+
+#ECS CPU and Memory
+Viser maksimal CPU og minnebruk for ECS-tjenesten. Memory ligger stabilt på 50% gjennom hele perioden. CPU viste en spike til 100% som virket uventet for Rekognition- og Bedrock-kall. For å undersøke kjørte jeg en ny test med 40 curl-kall uten deployment, og da holdt CPU seg lav og jevn gjennom hele testen. Dette bekrefter at spiken skyldtes redeployment, ikke Rekognition- og Bedrock-kallene.
+Bildet under illustrerer CPU/Memory ved 40 curl-kall uten redeployment prosessen:
+![CPU Memory Cloud](media/cpumemorycloud.png)
+Det er greit å ha dette i bakhodet når man skal feks ha alarmer mot cpu bruk - å ta i betrakning at deployments vil bruke mye cpu, slik at alarmer ikke utløses på det. 
+
+#Total sum gifts genereated
+Viser totalt antall gavefroslag generert. Gir innsikt i bruksvolum og aktivitetsmønstre over tid. 
+
+#Alarm
+`wishifai-13-gifts-over-5` varsler hvis Bedrock returnerer flere enn 5
+gaveforslag i én analyse. Prompten sier "inntil 5", men siden dette er en
+tekstinstruksjon uten hard kode-grense ønsket jeg å verifisere at alarmen
+fungerte som forventet.
+
+Første test bekreftet at modellen konsekvent returnerte nøyaktig 5 forslag
+og alarmen forble grønn. For å utløse alarmen endret jeg prompten til
+"nøyaktig 6 gaver". Bedrock fulgte instruksjonen og returnerte 6 forslag,
+og alarmen gikk av som forventet.
+![Alarm utløst](media/alarmProof.png)
+![Nøyaktig 6 gaver](media/aipromptproof.png)
+
+
