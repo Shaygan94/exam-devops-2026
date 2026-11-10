@@ -74,6 +74,24 @@ resource "aws_cloudwatch_dashboard" "wishifai" {
             ["Wishifai-13", "app.gifts.suggested.total.count"]
           ]
         }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 12
+        width  = 24
+        height = 6
+        properties = {
+          title  = "HTTP Request Latency (Application)"
+          view   = "timeSeries"
+          region = "eu-west-1"
+          period = 60
+          stat   = "Average"
+          metrics = [
+            ["Wishifai-13", "http.server.requests.avg", "method", "POST", "outcome", "SUCCESS", "status", "200", "uri", "/api/analyze"]
+          ]
+          yAxis = { left = { label = "milliseconds" } }
+        }
       }
     ]
   })
