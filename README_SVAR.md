@@ -1,11 +1,11 @@
 # exam-devops-2026
 
-# OPPGAVE 1A
+# Oppgave 1a
 For å bygge og starte containeren slik at den lytter på 'localhost:9999' kjør dette i bash:
 docker run -p 9999:8080 
 
 
-# Oppgave 1B 
+# Oppgave 1b
 Tagging-strategi:
 Underveis senere i oppgaven oppdaget jeg at ECS ikke plukket opp nytt image ved push, til tross
 for at både commit-SHA og latest ble pushet til ECR. Årsaken var at Terraform
@@ -28,14 +28,14 @@ Lenke til grønn kjøring: https://github.com/Shaygan94/exam-devops-2026/actions
 
 # Oppgave 3a
 
-Timer-metrikker
+Tekniske-metrikker
 - app.rekognition.duration måler responstid for rekognition-kallet 
 - app.bedrock.duration måler responstid for Bedrock-kallet
 
 Business-metrikker
 - app.gifts.suggested.total (counter). Totalt antall giftforslag generert. Sier noe om faktisk bruksvolum (ikke bare antall kall).
 
-- app.gifts.suggestion.per.analysis (distributionsummary). Antall forslag per analyse. i AI prompten er det "inntil 5" i en tekstinstruksjon uten en hard grense. Metrikken vil avdekke om AI'en faktisk følger dette. Dette kan vi bruke som alarm i 3B.
+- app.gifts.suggestion.per.analysis (distributionsummary). Antall forslag per analyse. i AI prompten er det "inntil 5" i en tekstinstruksjon uten en hard grense. Metrikken vil avdekke om AI'en faktisk følger dette. Dette kan vil jeg bruke som grunnlag for alarmen i 3B.
 
 # Oppgave 3b
 
@@ -44,13 +44,13 @@ Datagrunnlaget er 40 curl-kall mot tjenesten (20 per bilde).
 
 ![CloudWatch-skjermbilde](media/cloudwatchImg.png)
 
-#Rekognition and Bedrock latency
+# Rekognition and Bedrock latency
 Viser maksimal responstid per min. Bedrock bruker ca 16-19 sek og Rekognition bruker under 1 sek. Bedrock er den klare flaskehalsen og forklarer grunderens bekymring om treg tjeneste. 
 
-#Gift reccomondation per analysis
+# Gift reccomondation per analysis
 Viser gjennomsnittlig gaveforslag returnert per analyse. Prompten instruerer Bedrock om "inntil 5 gaver", og grafen bekrefter at modellen returnerer nøyaktig 5. 
 
-#ECS CPU and Memory
+# ECS CPU and Memory
 Viser maksimal CPU og minnebruk for ECS-tjenesten. Memory ligger stabilt på 50% gjennom hele perioden. CPU viste en spike til 100% som virket uventet for Rekognition- og Bedrock-kall. For å undersøke kjørte jeg en ny test med 40 curl-kall uten deployment, og da holdt CPU seg lav og jevn gjennom hele testen. Dette bekrefter at spiken skyldtes redeployment, ikke Rekognition- og Bedrock-kallene.
 Bildet under illustrerer CPU/Memory ved 40 curl-kall uten redeployment prosessen:
 ![CPU Memory Cloud](media/cpumemorycloud.png)
