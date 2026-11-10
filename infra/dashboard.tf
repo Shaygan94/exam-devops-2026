@@ -88,7 +88,7 @@ resource "aws_cloudwatch_dashboard" "wishifai" {
           period = 60
           stat   = "Average"
           metrics = [
-            ["Wishifai-13", "http.server.requests.avg", "method", "POST", "outcome", "SUCCESS", "status", "200", "uri", "/api/analyze"]
+            ["Wishifai-13", "http.server.requests.avg", "exception", "none", "method", "POST", "error", "none", "uri", "/api/analyze", "outcome", "SUCCESS", "status", "200"]
           ]
           yAxis = { left = { label = "milliseconds" } }
         }
