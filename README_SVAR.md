@@ -7,14 +7,24 @@ docker run -p 9999:8080
 
 # Oppgave 1B 
 Tagging-strategi:
-Brukte commit-SHA (git rev-parse --short HEAD) og latest for image tagging. 
-Commit-Sha:Sørger for full sporbarhet og revisjonskontroll ved at docker-imaget i ECR er knyttet til en spesifikk commit i kildekoden.
-Latest: Brukes for enkel referanse til den nyeste versjonen av applikasjonen
+Underveis senere i oppgaven oppdaget jeg at ECS ikke plukket opp nytt image ved push, til tross
+for at både commit-SHA og latest ble pushet til ECR. Årsaken var at Terraform
+ikke sendte SHA-taggen videre til task definition. Løst ved å sende commit-SHA
+eksplisitt som Terraform-variabel slik at task definition endres ved hver deploy.
 
-Lenke etil grønn kjøring Github Actions: https://github.com/Shaygan94/exam-devops-2026/actions/runs/41092765216
+Lenke til grønn kjøring: https://github.com/Shaygan94/exam-devops-2026/actions/runs/42371750609
+
+# Oppgave 2a
+ Offentlig URL til tjenesten: https://wi-40b646c1b32242618c04acfba1c6bc89.ecs.eu-west-1.on.aws
+
+# Oppgave 2b
+Terraform state lagres i S3 med nøkkel: wishifai/13/terraform.tfstate. Dette gjøres i backend.tf 
+Backend-konfigurasjon i Terraform støtter ikke variabler og derfor hardkodet jeg appnavn og kandidatnr. 
 
 # Oppgave 2c
-Det er fornufting at terraform kjører etter at containeren er builda, fordi infrastrukturen trenger den nye Docker-imagetaggen for å vite hvilken versjon av applikasjonen som skal rulles ut. Hvis terraform hadde kjørt før eller parallelt, ville ikke imaget finnes enda. 
+Det er fornufting at terraform kjører etter at containeren er builda, fordi infrastrukturen trenger den nye Docker-imagetaggen for å vite hvilken versjon av applikasjonen som skal deployes til ECS. Hvis terraform hadde kjørt før eller parallelt, ville ikke imaget eksistert enda. 
+
+Lenke til grønn kjøring: https://github.com/Shaygan94/exam-devops-2026/actions/runs/41517134852
 
 # Oppgave 3a
 
@@ -27,7 +37,7 @@ Business-metrikker
 
 - app.gifts.suggestion.per.analysis (distributionsummary). Antall forslag per analyse. i AI prompten er det "inntil 5" i en tekstinstruksjon uten en hard grense. Metrikken vil avdekke om AI'en faktisk følger dette. Dette kan vi bruke som alarm i 3B.
 
-#Oppgave 3b
+# Oppgave 3b
 
 Dashboard heter `wishifai-13`
 Datagrunnlaget er 40 curl-kall mot tjenesten (20 per bilde).
@@ -46,12 +56,16 @@ Bildet under illustrerer CPU/Memory ved 40 curl-kall uten redeployment prosessen
 ![CPU Memory Cloud](media/cpumemorycloud.png)
 Det er greit å ha dette i bakhodet når man skal feks ha alarmer mot cpu bruk - å ta i betrakning at deployments vil bruke mye cpu, slik at alarmer ikke utløses på det. 
 
-#Total sum gifts genereated
+# Total sum gifts genereated
 Viser totalt antall gavefroslag generert. Gir innsikt i bruksvolum og aktivitetsmønstre over tid. 
 
-#Alarm
+# HTTP Request Latency
+Viser gjennomsnittlig responstid for POST /api/analyze-endepunktet, hentet fra Spring Boot Actuator.
+![actuator](media/all5widgets.png)
+
+# Alarm
 `wishifai-13-gifts-over-5` varsler hvis Bedrock returnerer flere enn 5
-gaveforslag i én analyse. Prompten sier "inntil 5", men siden dette er en
+gaveforslag i en analyse. Prompten sier "inntil 5", men siden dette er en
 tekstinstruksjon uten hard kode-grense ønsket jeg å verifisere at alarmen
 fungerte som forventet.
 
