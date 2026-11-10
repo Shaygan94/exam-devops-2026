@@ -47,8 +47,9 @@ Dashboard heter `wishifai-13`
 Datagrunnlaget er 40 curl-kall mot tjenesten (20 per bilde).
 
 Dashboardet dekker de tre kategoriene oppgaven krever: Business (gaver per analyse og totalt antall gaver), Infrastruktur (ECS CPU og minne) og Applikasjon (HTTP request-latency fra Spring Boot Actuator).
-
 ![CloudWatch-skjermbilde](media/cloudwatchImg.png)
+Her under er en screenshot med Actuator grafen inkludert.
+![actuator](media/all5widgets.png)
 
 ## Rekognition and Bedrock latency
 Viser maksimal responstid per min. Bedrock bruker ca 16-19 sek og Rekognition bruker under 1 sek. Bedrock er den klare flaskehalsen og forklarer grunderens bekymring om treg tjeneste. 
@@ -67,7 +68,6 @@ Viser totalt antall gavefroslag generert. Gir innsikt i bruksvolum og aktivitets
 
 ## HTTP Request Latency
 Viser responstid for POST /api/analyze, hentet fra Spring Boot Actuator via Micrometer. Gjennomsnittet ligger på rundt 18,5 sekunder per kall. Det stemmer med summen av Bedrock (16–19 sek) og Rekognition (under 1 sek), og bekrefter at nesten all ventetid for brukeren skyldes Bedrock.
-![actuator](media/all5widgets.png)
 
 ## Alarm
 `wishifai-13-gifts-over-5` varsler hvis Bedrock returnerer flere enn 5
